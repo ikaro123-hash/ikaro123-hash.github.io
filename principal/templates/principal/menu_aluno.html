@@ -1,0 +1,57 @@
+{% extends 'principal/base.html' %}
+{% block title %}Presenças do Dia{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+  <h2 class="mb-4">Confirmação de Presença - {{ data_hoje }}</h2>
+
+{% for turno, dados in listas.items %}
+  <div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h4>Ônibus das {{ turno }}</h4>
+      <span class="badge {% if dados.lista.aberta %}bg-success{% else %}bg-danger{% endif %}">
+        {% if dados.lista.aberta %}Aberta{% else %}Fechada{% endif %}
+      </span>
+    </div>
+    <div class="card-body">
+      <p>Total Confirmados: <strong>{{ dados.total_confirmados }} / {{ max_usuarios }}</strong></p>
+
+      {% if dados.presenca %}
+        <div class="alert alert-info">
+          Você está na lista, posição: <strong>{{ dados.posicao }}</strong>
+        </div>
+        <form method="post" class="mb-3">
+          {% csrf_token %}
+          <input type="hidden" name="turno" value="{{ turno }}">
+          <button name="remover" type="submit" class="btn btn-danger">Remover meu nome</button>
+        </form>
+      {% elif dados.lista.aberta and dados.total_confirmados < max_usuarios %}
+        <form method="post" class="mb-3">
+          {% csrf_token %}
+          <input type="hidden" name="turno" value="{{ turno }}">
+          <button name="confirmar" type="submit" class="btn btn-success">Confirmar presença</button>
+        </form>
+      {% else %}
+        <div class="alert alert-warning">
+          Não é possível confirmar presença no momento.
+        </div>
+      {% endif %}
+
+      <h5>Alunos Confirmados</h5>
+      {% if dados.presencas %}
+        <ol class="list-group list-group-numbered">
+          {% for p in dados.presencas %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              {{ p.aluno.nome }}
+              <span class="badge bg-primary rounded-pill">{{ forloop.counter }}</span>
+            </li>
+          {% endfor %}
+        </ol>
+      {% else %}
+        <p class="text-muted fst-italic">Nenhum aluno confirmado.</p>
+      {% endif %}
+    </div>
+  </div>
+{% endfor %}
+</div>
+{% endblock %}

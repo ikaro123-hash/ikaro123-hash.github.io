@@ -1,0 +1,20 @@
+{% extends 'principal/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow p-4">
+    <h2 class="mb-4 text-center text-success">Meus Dados</h2>
+
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item"><strong>Nome:</strong> {{ aluno.nome }}</li>
+      <li class="list-group-item"><strong>E-mail:</strong> {{ aluno.email }}</li>
+      <li class="list-group-item"><strong>Matrícula:</strong> {{ aluno.matricula }}</li>
+      <li class="list-group-item"><strong>Curso:</strong> {{ aluno.curso }}</li>
+    </ul>
+
+    <div class="mt-4 text-center">
+      <a href="{% url 'principal:menu_aluno_com_id' aluno.id %}" class="btn btn-outline-success">Voltar</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

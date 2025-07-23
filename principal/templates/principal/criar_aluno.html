@@ -1,0 +1,58 @@
+{% extends 'principal/base.html' %}
+{% block title %}Criar Aluno{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+  <h2>Criar Novo Aluno</h2>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    {% for field in form %}
+      <div class="mb-3">
+        {{ field.label_tag }}
+        {{ field }}
+        {% if field.errors %}
+          <div class="text-danger">{{ field.errors }}</div>
+        {% endif %}
+      </div>
+      <div class="mb-3">
+  {{ form.nome.label_tag }}
+  {{ form.nome }}
+</div>
+
+<div class="mb-3">
+  {{ form.username.label_tag }}
+  {{ form.username }}
+</div>
+
+<div class="mb-3">
+  {{ form.password.label_tag }}
+  {{ form.password }}
+</div>
+
+<div class="mb-3">
+  {{ form.email.label_tag }}
+  {{ form.email }}
+</div>
+
+<div class="mb-3">
+  {{ form.matricula.label_tag }}
+  {{ form.matricula }}
+</div>
+
+<div class="mb-3">
+  {{ form.curso.label_tag }}
+  {{ form.curso }}
+</div>
+
+    {% endfor %}
+
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a href="{% url 'principal:listar_alunos' %}" class="btn btn-secondary">Cancelar</a>
+  </form>
+  
+</div>
+{% endblock %}
+

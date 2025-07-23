@@ -1,0 +1,47 @@
+{% extends 'principal/base.html' %}
+{% block title %}Listas do Dia{% endblock %}
+
+{% block content %}
+<h1>Listas de Presença - {{ data_hoje }}</h1>
+
+{% for item in listas %}
+  {% with lista=item.lista presencas=item.presencas total=item.total_confirmados %}
+  <div class="card mb-4 shadow-sm">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <strong>Ônibus das {{ lista.turno }}</strong>
+      <span class="badge {% if lista.aberta %}bg-success{% else %}bg-danger{% endif %}">
+        {% if lista.aberta %}Aberta{% else %}Fechada{% endif %}
+      </span>
+    </div>
+    <div class="card-body">
+      <p>Total Confirmados: <strong>{{ total }} / {{ max_usuarios }}</strong></p>
+
+      <form method="post" class="mb-3">
+        {% csrf_token %}
+        <input type="hidden" name="turno" value="{{ lista.turno }}">
+        {% if lista.aberta %}
+          <button name="fechar" type="submit" class="btn btn-danger">Fechar Lista</button>
+        {% else %}
+          <button name="abrir" type="submit" class="btn btn-success">Abrir Lista</button>
+        {% endif %}
+      </form>
+
+      <h5>Alunos Confirmados</h5>
+      {% if presencas %}
+        <ol class="list-group list-group-numbered">
+          {% for p in presencas %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              {{ p.aluno.nome }}
+              <span class="badge bg-primary rounded-pill">{{ forloop.counter }}</span>
+            </li>
+          {% endfor %}
+        </ol>
+      {% else %}
+        <p class="text-muted fst-italic">Nenhum aluno confirmado.</p>
+      {% endif %}
+    </div>
+  </div>
+  {% endwith %}
+{% endfor %}
+
+{% endblock %}

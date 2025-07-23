@@ -1,0 +1,32 @@
+{% extends 'principal/base.html' %}
+{% block title %}Histórico{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Histórico de Presenças</h2>
+  {% if presencas %}
+    <table class="table table-bordered table-striped mt-3">
+      <thead class="table-dark">
+        <tr>
+          <th>Data</th>
+          <th>Turno</th>
+          <th>Horário de Confirmação</th>
+          <th>Posição na Lista</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for presenca in presencas %}
+          <tr>
+            <td>{{ presenca.lista.data|date:"d/m/Y" }}</td>
+            <td>{{ presenca.lista.get_turno_display }}</td>
+            <td>{{ presenca.confirmado_em|date:"d/m/Y H:i" }}</td>
+            <td>{{ presenca.posicao }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Você ainda não participou de nenhuma lista.</p>
+  {% endif %}
+</div>
+{% endblock %}
